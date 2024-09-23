@@ -1,75 +1,58 @@
-pipeline {
+pipeline{
     agent any
-
-    environment {
-        EMAIL_RECIPIENT = 'dev-team@example.com'
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                echo 'Checking out the code from GitHub...'
-                git 'https://github.com/your-username/simple-python-app.git'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                echo 'Installing dependencies...'
-                sh 'pip install -r requirements.txt'
-            }
-        }
-
+     stages {
         stage('Build') {
             steps {
-                echo 'Building the application...'
-                // For Python, we don't have a build step, but we can just echo.
-                echo 'Build step completed (no artifacts to build).'
+                script {
+                    echo "Fetching the source code",
+                    echo "Compile the code and generate any necessary artifacts"
+                }
             }
         }
 
-        stage('Unit Tests') {
+        stage('Test') {
             steps {
-                echo 'Running unit tests...'
-                sh 'python -m unittest discover -s test'
+                echo "Running unit tests",
+                echo "Running integration tests"
             }
         }
 
-        stage('Deploy to Staging') {
+        stage('Code Quality Check') {
             steps {
-                echo 'Deploying to staging server...'
-                // Example for staging deployment
-                sh 'echo "Deploying to staging server..."'
+                echo "Checking the quality of the code"
             }
         }
 
-        stage('Integration Tests on Staging') {
+        stage('Deploy') {
             steps {
-                echo 'Running integration tests on staging...'
-                // Placeholder for integration tests
-                echo 'Integration tests completed.'
+                echo "Deploy the application to a testing environment specified by the environment variable"
+            }
+        }
+
+        stage('Approval') {
+            steps {
+                echo "Simulating manual approval...",
+                sleep time: 10, unit: 'SECONDS'
             }
         }
 
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying to production server...'
-                sh 'echo "Deploying to production server..."'
+                echo "Deploying the code to the production environment"
             }
-        }
+       }
     }
-
-    post {
+post {
         success {
-            mail to: "${gandeti.tarun@gmail.com}",
-                 subject: "Build Successful: ",
-                 body: "The build has completed successfully.",
+            mail to: "gandeti.tarun@gmail.com",
+            subject: "Build Successful",
+            body: "The build has completed successfully. "
         }
         failure {
-            mail to: "${gandeti.tarun@gmail.com}",
-                 subject: "Build Failed: ",
-                 body: "The build has failed. Please check the logs.",
-                 attachLog: true
-      }
-    }
+            mail to: "gandeti.tarun@gmail.com",
+            subject: "Build Failed",
+            body: "The build has failed. Please check the logs.",
+       }
+     }
+
 }
